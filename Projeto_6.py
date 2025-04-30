@@ -23,6 +23,11 @@ st.markdown('''
 # Configuração da barra lateral
 st.sidebar.header('Menu de opções')
 
+@st.cache_data
+def get_data(ticker, start_date, end_date):
+    return yf.Ticker(ticker).history(start=start_date, end=end_date)
+
+
 # Seleção do ticker
 ticker = st.sidebar.text_input('Ticker do ativo', value='ITUB4.SA')
 
@@ -40,7 +45,7 @@ if st.sidebar.button('▶️ Simular'):
     # Coleta as cotações dos últimos modeling_days dias
     end_date = datetime.today()
     start_date = end_date - timedelta(days=modeling_days)
-    df = yf.Ticker(ticker).history(start=start_date , end=end_date)
+    df = df = get_data(ticker, start_date, end_date)
 
     ### Modela os parâmetros do GBM
     close_prices = df['Close'].tail(modeling_days)
